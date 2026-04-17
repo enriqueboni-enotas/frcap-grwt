@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planejamento CNPJ Alfanumérico — Q2/Q3 2026</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #fff;
+      color: #24292f;
+      padding: 32px
+    }
+
+    h1 {
+      font-size: 22px;
+      color: #0969da;
+      margin-bottom: 4px
+    }
+
+    .sub {
+      font-size: 13px;
+      color: #656d76;
+      margin-bottom: 28px
+    }
+
+    .sec {
+      margin-bottom: 28px
+    }
+
+    .st {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 10px
+    }
+
+    .s-done {
+      background: #dafbe1;
+      color: #1a7f37
+    }
+
+    .s-doing {
+      background: #fff8c5;
+      color: #9a6700
+    }
+
+    .s-todo {
+      background: #ddf4ff;
+      color: #0969da
+    }
+
+    .s-grwt {
+      background: #f0e6ff;
+      color: #6e3ff3
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px
+    }
+
+    th {
+      text-align: left;
+      padding: 8px 10px;
+      background: #f6f8fa;
+      color: #656d76;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      border-bottom: 2px solid #d0d7de
+    }
+
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #d8dee4;
+      vertical-align: middle
+    }
+
+    tr:hover td {
+      background: #f6f8fa
+    }
+
+    .b {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap
+    }
+
+    .b-mel {
+      background: #ddf4ff;
+      color: #0969da
+    }
+
+    .b-dt {
+      background: #fff8c5;
+      color: #9a6700
+    }
+
+    .b-reg {
+      background: #ffebe9;
+      color: #cf222e
+    }
+
+    .b-done {
+      background: #dafbe1;
+      color: #1a7f37
+    }
+
+    .b-doing {
+      background: #fff8c5;
+      color: #9a6700
+    }
+
+    .b-todo {
+      background: #ddf4ff;
+      color: #0969da
+    }
+
+    .b-cancel {
+      background: #ffebe9;
+      color: #cf222e
+    }
+
+    .b-back {
+      background: #f0f3f6;
+      color: #24292f
+    }
+
+    .b-front {
+      background: #f0f3f6;
+      color: #0969da
+    }
+
+    .b-sub {
+      background: #f0f3f6;
+      color: #656d76
+    }
+
+    .b-story {
+      background: #e8def8;
+      color: #6e3ff3
+    }
+
+    .b-task {
+      background: #ddf4ff;
+      color: #0550ae
+    }
+
+    .b-spike {
+      background: #fff8c5;
+      color: #9a6700
+    }
+
+    a.lk {
+      color: #0969da;
+      text-decoration: none
+    }
+
+    a.lk:hover {
+      text-decoration: underline
+    }
+
+    .est {
+      font-weight: 600
+    }
+
+    .est-p {
+      color: #656d76;
+      font-style: italic
+    }
+
+    .pct {
+      display: inline-block;
+      font-size: 10px;
+      color: #656d76;
+      margin-left: 4px;
+      font-weight: 400
+    }
+
+    .child {
+      display: none;
+      background: #fafbfc
+    }
+
+    .child td:nth-child(2) {
+      padding-left: 32px
+    }
+
+    .toggle {
+      cursor: pointer;
+      color: #0969da;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      background: none;
+      padding: 0
+    }
+
+    .toggle:hover {
+      text-decoration: underline
+    }
+
+    .toggle::before {
+      content: '▶ ';
+      font-size: 10px
+    }
+
+    .toggle.open::before {
+      content: '▼ '
+    }
+
+    .sum-row {
+      background: #f6f8fa
+    }
+
+    .sum-row td {
+      font-weight: 600;
+      color: #0969da;
+      border-top: 2px solid #d0d7de
+    }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 11px;
+      color: #656d76
+    }
+
+    .proj-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-right: 4px
+    }
+
+    .proj-frcap {
+      background: #ddf4ff;
+      color: #0550ae
+    }
+
+    .proj-grwt {
+      background: #f0e6ff;
+      color: #6e3ff3
+    }
+
+    .deadline-box {
+      background: #ffebe9;
+      border: 1px solid #cf222e;
+      border-radius: 6px;
+      padding: 10px 16px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      color: #cf222e
+    }
+
+    .deadline-box strong {
+      font-size: 14px
+    }
+  </style>
+</head>
+
+<body>
+  <h1>📋 Planejamento CNPJ Alfanumérico</h1>
+  <div class="sub">Instrução Normativa RFB nº 2.229/2024 · Gerado em 17/04/2026 · Projetos: FRCAP + GRWT</div>
+
+  <div class="deadline-box">
+    <strong>⏰ Datas Regulatórias</strong><br>
+    📅 08/05/2026 — Todas as waves de atualização concluídas<br>
+    📅 11/05 a 15/06/2026 — Homologação e testes integrados em staging<br>
+    📅 01/07/2026 — Go-live em produção
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- FRCAP — eNotas                              -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <div class="sec"><span class="st s-done">✅ Done — <span class="proj-tag proj-frcap">FRCAP</span></span>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Descrição</th>
+        <th>Tipo</th>
+        <th>Card</th>
+        <th>Estimativa</th><th>Status</th><th>Sprint</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>[Spike] Validação técnica dos pontos de impacto por sistema</td>
+        <td><span class="b b-spike">Spike</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3430" target="_blank">FRCAP-3430</a></td>
+        <td class="est">~1h</td><td><span class="b b-done">Done</span> <span class="pct">100%</span></td><td><span class="b b-doing">Q2-S1</span></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Quebra de tarefas / Refinamento</td>
+        <td><span class="b b-task">Task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3431" target="_blank">FRCAP-3431</a></td>
+        <td class="est">~4h</td>
+        <td><span class="b b-done">Done</span> <span class="pct">100%</span></td>
+        <td><span class="b b-doing">Q2-S1</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- FRCAP TO-DO -->
+  <div class="sec"><span class="st s-todo">📌 To-Do — <span class="proj-tag proj-frcap">FRCAP</span></span>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Descrição</th>
+        <th>Tipo</th>
+        <th>Card</th>
+        <th>Estimativa</th><th>Status</th><th>Sprint</th>
+      </tr>
+
+      <!-- 3 — ConsultaCNPJ -->
+      <tr>
+        <td>3</td>
+        <td>Tratar CNPJ alfanumérico no ConsultaCNPJ <button class="toggle" onclick="tog(this,'g3')">sem
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3512" target="_blank">FRCAP-3512</a></td>
+        <td class="est">~8h</td><td><span class="b b-todo">Ready for Tech Refinement</span></td><td><span class="b b-todo">Q2-S1.2</span></td>
+      </tr>
+
+      <!-- 4 — Client-side Emissor -->
+      <tr>
+        <td>4</td>
+        <td>Tratar CNPJ alfanumérico no Client-side do Emissor <button class="toggle" onclick="tog(this,'g4')">sem
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3513" target="_blank">FRCAP-3513</a></td>
+        <td class="est">~8h</td><td><span class="b b-todo">Ready for Tech Refinement</span></td><td><span class="b b-todo">Q2-S1.2</span></td>
+      </tr>
+
+      <!-- 5 — Server-side Emissor -->
+      <tr>
+        <td>5</td>
+        <td>Tratar CNPJ alfanumérico no Server-side do Emissor <button class="toggle" onclick="tog(this,'g5')">sem
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3514" target="_blank">FRCAP-3514</a></td>
+        <td class="est">~8h</td><td><span class="b b-todo">Ready for Tech Refinement</span></td><td><span class="b b-todo">Q2-S1.2</span></td>
+      </tr>
+
+      <!-- 6 — Client-side Embed -->
+      <tr>
+        <td>6</td>
+        <td>Tratar CNPJ alfanumérico no Client-side do Embed <button class="toggle" onclick="tog(this,'g6')">sem
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3515" target="_blank">FRCAP-3515</a></td>
+        <td class="est">~8h</td><td><span class="b b-todo">Ready for Tech Refinement</span></td><td><span class="b b-todo">Q2-S1.2</span></td>
+      </tr>
+
+      <!-- 7 — Server-side Embed -->
+      <tr>
+        <td>7</td>
+        <td>Tratar CNPJ alfanumérico no Server-side do Embed <button class="toggle" onclick="tog(this,'g7')">sem
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3516" target="_blank">FRCAP-3516</a></td>
+        <td class="est">~8h</td><td><span class="b b-todo">Ready for Tech Refinement</span></td><td><span class="b b-todo">Q2-S1.2</span></td>
+      </tr>
+
+      <!-- 8 — Validar fluxos -->
+      <tr>
+        <td>8</td>
+        <td>Validar fluxos de CNPJ (E2E)</td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3517" target="_blank">FRCAP-3517</a></td>
+        <td class="est">~8h</td><td><span class="b b-todo">Ready for Tech Refinement</span></td><td><span class="b b-todo">Q2-S1.2</span></td>
+      </tr>
+
+      <!-- 9 — PRs Bifrost Wave 2 -->
+      <tr>
+        <td>9</td>
+        <td>Lista de PRs da Wave 2 para revisão (Bifrost) <button class="toggle" onclick="tog(this,'g9')">3
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3591" target="_blank">FRCAP-3591</a></td>
+        <td class="est">~12h</td><td><span class="b b-todo">Ready for Tech Refinement</span></td><td><span class="b b-todo">Q2-S1.2</span></td>
+      </tr>
+      <tr class="child g9">
+        <td></td>
+        <td>Revisar PR #551 do app-enotas (Bifrost)</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3597" target="_blank">FRCAP-3597</a></td>
+        <td>~2h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g9">
+        <td></td>
+        <td>Revisar PR #168 do invoice-nf (Bifrost)</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3598" target="_blank">FRCAP-3598</a></td>
+        <td>~3h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g9">
+        <td></td>
+        <td>Validar deploy em staging dos PRs Bifrost mergeados</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3599" target="_blank">FRCAP-3599</a></td>
+        <td>~1h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+
+      <!-- 10 — app-enotas/start -->
+      <tr>
+        <td>10</td>
+        <td>Tratar CNPJ alfanumérico no app-enotas/start <button class="toggle" onclick="tog(this,'g10')">5
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3592" target="_blank">FRCAP-3592</a></td>
+        <td class="est">~24h</td><td><span class="b b-todo">Ready for Tech Refinement</span></td><td><span class="b b-todo">Q2-S1.2</span></td>
+      </tr>
+      <tr class="child g10">
+        <td></td>
+        <td>Mapear pontos de validação não cobertos pelo Bifrost no app-enotas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3600" target="_blank">FRCAP-3600</a></td>
+        <td>~2h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g10">
+        <td></td>
+        <td>Atualizar validações e máscaras de CNPJ no app-enotas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3601" target="_blank">FRCAP-3601</a></td>
+        <td>~4h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g10">
+        <td></td>
+        <td>Atualizar testes unitários e de integração no app-enotas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3602" target="_blank">FRCAP-3602</a></td>
+        <td>~3h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g10">
+        <td></td>
+        <td>Code review + ajustes no app-enotas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3603" target="_blank">FRCAP-3603</a></td>
+        <td>~2h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g10">
+        <td></td>
+        <td>Deploy e validação em staging do app-enotas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3604" target="_blank">FRCAP-3604</a></td>
+        <td>~1h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+
+      <!-- 11 — invoice-nf -->
+      <tr>
+        <td>11</td>
+        <td>Tratar CNPJ alfanumérico no invoice-nf <button class="toggle" onclick="tog(this,'g11')">6 subtasks</button>
+        </td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3595" target="_blank">FRCAP-3595</a></td>
+        <td class="est">~40h</td><td><span class="b b-back">—</span></td><td><span class="b b-todo">Backlog</span></td>
+      </tr>
+      <tr class="child g11">
+        <td></td>
+        <td>Mapear pontos de impacto não cobertos pelo Bifrost no invoice-nf</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3605" target="_blank">FRCAP-3605</a></td>
+        <td>~3h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g11">
+        <td></td>
+        <td>Atualizar validações e regras de negócio no invoice-nf</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3606" target="_blank">FRCAP-3606</a></td>
+        <td>~6h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g11">
+        <td></td>
+        <td>Migrations de banco para CNPJ alfanumérico no invoice-nf</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3607" target="_blank">FRCAP-3607</a></td>
+        <td>~3h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g11">
+        <td></td>
+        <td>Atualizar testes unitários e de integração no invoice-nf</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3608" target="_blank">FRCAP-3608</a></td>
+        <td>~4h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g11">
+        <td></td>
+        <td>Code review + ajustes no invoice-nf</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3609" target="_blank">FRCAP-3609</a></td>
+        <td>~2h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g11">
+        <td></td>
+        <td>Deploy e validação em staging do invoice-nf</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3610" target="_blank">FRCAP-3610</a></td>
+        <td>~2h</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- GRWT — Fiscal Journey / gc-tax              -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <div class="sec"><span class="st s-grwt">🟣 To-Do — <span class="proj-tag proj-grwt">GRWT</span> gc-tax</span>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Descrição</th>
+        <th>Tipo</th>
+        <th>Card</th>
+        <th>Estimativa</th><th>Status</th><th>Sprint</th>
+      </tr>
+
+      <tr>
+        <td>12</td>
+        <td>Adequação dos repositórios gc-tax ao CNPJ Alfanumérico <button class="toggle" onclick="tog(this,'g12')">3
+            subtasks</button></td>
+        <td><span class="b b-reg">Regulatório</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/GRWT-2990" target="_blank">GRWT-2990</a></td>
+        <td class="est-p">A estimar</td><td><span class="b b-todo">Backlog</span> <span class="pct">0%</span></td><td><span class="b b-todo">Q2-S2</span></td>
+      </tr>
+      <tr class="child g12">
+        <td></td>
+        <td>[Discovery] Mapear todos os pontos no código que validam, formatam, armazenam ou manipulam CNPJ</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/GRWT-2991" target="_blank">GRWT-2991</a></td>
+        <td>-</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g12">
+        <td></td>
+        <td>[Spike] Mapear todos os pontos no código que validam, formatam, armazenam ou manipulam CNPJ</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/GRWT-2992" target="_blank">GRWT-2992</a></td>
+        <td>-</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+      <tr class="child g12">
+        <td></td>
+        <td>[Quebra-Tarefas] Mapear todos os pontos no código que validam, formatam, armazenam ou manipulam CNPJ</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/GRWT-2993" target="_blank">GRWT-2993</a></td>
+        <td>-</td><td><span class="b b-todo">To Do</span></td><td></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- RESUMO                                      -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <div class="sec">
+    <table>
+      <tr class="sum-row">
+        <td colspan="2">
+          <span class="proj-tag proj-frcap">FRCAP</span> Épico: <a class="lk"
+            href="https://hotmart.atlassian.net/browse/FRCAP-3344" target="_blank">FRCAP-3344</a> — 2 tasks done, 8
+          stories to-do (6 sem subtasks)
+        </td>
+        <td colspan="2">
+          <span class="proj-tag proj-grwt">GRWT</span> Épico: <a class="lk"
+            href="https://hotmart.atlassian.net/browse/GRWT-2990" target="_blank">GRWT-2990</a> — 3 subtasks to-do
+          (api-gc-tax: 970 menções, gc-tax-spring-boot: 366 menções)
+        </td>
+        <td class="est">Total estimado FRCAP: ~129h (5h done + 124h to-do) · GRWT: A estimar</td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="sec" style="margin-top: 16px">
+    <table>
+      <tr>
+        <th colspan="7"
+          style="background: #ffebe9; color: #cf222e; font-size: 12px; text-transform: none; letter-spacing: 0">⚠️
+          Repositórios com análise manual (>10 menções CNPJ) · <a class="lk"
+            href="https://docs.google.com/spreadsheets/d/1Ri9yk9bQh9wx0J5JZJnWbIoTlyh1jWjkAGcG0_UfFDM/edit?gid=600136194"
+            target="_blank" style="color:#cf222e">📄 Planilha Bifrost</a></th>
+      </tr>
+      <tr>
+        <th>Org</th>
+        <th>Repositório</th>
+        <th>Linguagem</th>
+        <th>PU / Squad</th>
+        <th>Menções CNPJ</th>
+        <th>Escopo Bifrost</th>
+        <th>Projeto</th>
+      </tr>
+      <tr>
+        <td>enotas-org</td>
+        <td>app-gw</td>
+        <td>—</td>
+        <td>enotas-org</td>
+        <td class="est">2.507</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-frcap">FRCAP</span></td>
+      </tr>
+      <tr>
+        <td>enotas-org</td>
+        <td>app-emissor</td>
+        <td>—</td>
+        <td>enotas-org</td>
+        <td class="est">404</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-frcap">FRCAP</span></td>
+      </tr>
+      <tr>
+        <td>enotas-org</td>
+        <td>api-gw</td>
+        <td>—</td>
+        <td>enotas-org</td>
+        <td class="est">231</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-frcap">FRCAP</span></td>
+      </tr>
+      <tr>
+        <td>enotas-org</td>
+        <td>eNotas.Emissor.ConsultasCNPJ</td>
+        <td>—</td>
+        <td>enotas-org</td>
+        <td class="est">81</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-frcap">FRCAP</span></td>
+      </tr>
+      <tr>
+        <td>Hotmart-Org</td>
+        <td>invoice-nf</td>
+        <td>Java</td>
+        <td>Financial Services / eNotas</td>
+        <td class="est">70</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-frcap">FRCAP</span></td>
+      </tr>
+      <tr>
+        <td>enotas-org</td>
+        <td>lib-emissor-base</td>
+        <td>—</td>
+        <td>enotas-org</td>
+        <td class="est">60</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-frcap">FRCAP</span></td>
+      </tr>
+      <tr>
+        <td>enotas-org</td>
+        <td>app-emissor-plugin</td>
+        <td>—</td>
+        <td>enotas-org</td>
+        <td class="est">29</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-frcap">FRCAP</span></td>
+      </tr>
+      <tr>
+        <td>enotas-org</td>
+        <td>app-wall-e</td>
+        <td>—</td>
+        <td>enotas-org</td>
+        <td class="est">28</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-frcap">FRCAP</span></td>
+      </tr>
+      <tr>
+        <td>Hotmart-Org</td>
+        <td>app-enotas</td>
+        <td>Node.js</td>
+        <td>Financial Services / eNotas</td>
+        <td class="est">15</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-frcap">FRCAP</span></td>
+      </tr>
+      <tr style="border-top: 2px solid #d0d7de">
+        <td>Hotmart-Org</td>
+        <td>api-gc-tax</td>
+        <td>Java</td>
+        <td>— / Fiscal Journey</td>
+        <td class="est">970</td>
+        <td>>10 (manual)</td>
+        <td><span class="proj-tag proj-grwt">GRWT</span></td>
+      </tr>
+      <tr>
+        <td>Hotmart-Org</td>
+        <td>gc-tax-spring-boot</td>
+        <td>Java</td>
+        <td>— / Others</td>
+        <td class="est">3</td>
+        <td>3 (manual)</td>
+        <td><span class="proj-tag proj-grwt">GRWT</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    Fonte: Épicos <a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3344" target="_blank">FRCAP-3344</a> e
+    <a class="lk" href="https://hotmart.atlassian.net/browse/GRWT-2990" target="_blank">GRWT-2990</a> ·
+    Instrução Normativa RFB nº 2.229/2024 · Programa Bifrost (Wave 2)
+  </div>
+
+  <script>
+    function tog(btn, cls) {
+      btn.classList.toggle('open');
+      document.querySelectorAll('.' + cls).forEach(function (r) {
+        r.style.display = r.style.display === 'table-row' ? 'none' : 'table-row';
+      });
+    }
+  </script>
+</body>
+
+</html>

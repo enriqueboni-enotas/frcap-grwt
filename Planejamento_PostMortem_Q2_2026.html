@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planejamento Post Mortem eNotas — Q2 2026</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #fff;
+      color: #24292f;
+      padding: 32px
+    }
+
+    h1 {
+      font-size: 22px;
+      color: #0969da;
+      margin-bottom: 4px
+    }
+
+    .sub {
+      font-size: 13px;
+      color: #656d76;
+      margin-bottom: 28px
+    }
+
+    .sec {
+      margin-bottom: 28px
+    }
+
+    .st {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 10px
+    }
+
+    .s-done {
+      background: #dafbe1;
+      color: #1a7f37
+    }
+
+    .s-doing {
+      background: #fff8c5;
+      color: #9a6700
+    }
+
+    .s-todo {
+      background: #ddf4ff;
+      color: #0969da
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px
+    }
+
+    th {
+      text-align: left;
+      padding: 8px 10px;
+      background: #f6f8fa;
+      color: #656d76;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      border-bottom: 2px solid #d0d7de
+    }
+
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #d8dee4;
+      vertical-align: middle
+    }
+
+    tr:hover td {
+      background: #f6f8fa
+    }
+
+    .b {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap
+    }
+
+    .b-mel {
+      background: #ddf4ff;
+      color: #0969da
+    }
+
+    .b-dt {
+      background: #fff8c5;
+      color: #9a6700
+    }
+
+    .b-bau {
+      background: #fbefff;
+      color: #8250df
+    }
+
+    .b-done {
+      background: #dafbe1;
+      color: #1a7f37
+    }
+
+    .b-doing {
+      background: #fff8c5;
+      color: #9a6700
+    }
+
+    .b-todo {
+      background: #ddf4ff;
+      color: #0969da
+    }
+
+    .b-cancel {
+      background: #ffebe9;
+      color: #cf222e
+    }
+
+    .b-back {
+      background: #f0f3f6;
+      color: #24292f
+    }
+
+    .b-front {
+      background: #f0f3f6;
+      color: #0969da
+    }
+
+    .b-sub {
+      background: #f0f3f6;
+      color: #656d76
+    }
+
+    .b-story {
+      background: #e8def8;
+      color: #6e3ff3
+    }
+
+    .b-task {
+      background: #ddf4ff;
+      color: #0550ae
+    }
+
+    a.lk {
+      color: #0969da;
+      text-decoration: none
+    }
+
+    a.lk:hover {
+      text-decoration: underline
+    }
+
+    a.cf {
+      color: #1a7f37;
+      text-decoration: none;
+      font-size: 11px
+    }
+
+    a.cf:hover {
+      text-decoration: underline
+    }
+
+    .est {
+      font-weight: 600
+    }
+
+    .est-p {
+      color: #656d76;
+      font-style: italic
+    }
+
+    .pct {
+      display: inline-block;
+      font-size: 10px;
+      color: #656d76;
+      margin-left: 4px;
+      font-weight: 400
+    }
+
+    .child {
+      display: none;
+      background: #fafbfc
+    }
+
+    .child td:nth-child(2) {
+      padding-left: 32px
+    }
+
+    .child.L2 td:nth-child(2) {
+      padding-left: 56px
+    }
+
+    .toggle {
+      cursor: pointer;
+      color: #0969da;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      background: none;
+      padding: 0
+    }
+
+    .toggle:hover {
+      text-decoration: underline
+    }
+
+    .toggle::before {
+      content: '▶ ';
+      font-size: 10px
+    }
+
+    .toggle.open::before {
+      content: '▼ '
+    }
+
+    .sum-row {
+      background: #f6f8fa
+    }
+
+    .sum-row td {
+      font-weight: 600;
+      color: #0969da;
+      border-top: 2px solid #d0d7de
+    }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 11px;
+      color: #656d76
+    }
+  </style>
+</head>
+
+<body>
+  <h1>📋 Planejamento Ações Post Mortem eNotas</h1>
+  <div class="sub">War Room 12-20/02/2026 · Atualizado em 17/04/2026 · Fonte: Post Mortem Report FSBU</div>
+
+  <!-- DONE -->
+  <div class="sec"><span class="st s-done">✅ Done</span>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Descrição</th>
+        <th>Tipo</th>
+        <th>Card</th>
+        <th>Estimativa</th>
+        <th>Status</th>
+        <th>Sprint</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Validação de Série no Portal Nacional <button class="toggle" onclick="tog(this,'g1')">6 subtasks</button>
+        </td>
+        <td><span class="b b-mel">Melhoria</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-2943" target="_blank">FRCAP-2943</a></td>
+        <td class="est">~56h</td>
+        <td><span class="b b-done">Done</span> <span class="pct">100%</span></td>
+        <td><span class="b b-done">Q2-S1</span></td>
+      </tr>
+      <tr class="child g1">
+        <td></td>
+        <td>Discovery</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-2944" target="_blank">FRCAP-2944</a></td>
+        <td>4h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g1">
+        <td></td>
+        <td>Auto-preenchimento inteligente da série NFS-e</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3452" target="_blank">FRCAP-3452</a></td>
+        <td>8h</td>
+        <td><span class="b b-cancel">Canceled</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g1">
+        <td></td>
+        <td>Validação e bloqueio de salvamento para série NFS-e</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3453" target="_blank">FRCAP-3453</a></td>
+        <td>8h</td>
+        <td><span class="b b-cancel">Canceled</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g1">
+        <td></td>
+        <td>Testar cenários de validação e bloqueio</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3454" target="_blank">FRCAP-3454</a></td>
+        <td>4h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g1">
+        <td></td>
+        <td>Regras de validação na tela de configuração NFS-e</td>
+        <td><span class="b b-front">Front</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3455" target="_blank">FRCAP-3455</a></td>
+        <td>8h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g1">
+        <td></td>
+        <td>Regras no cadastro da empresa</td>
+        <td><span class="b b-front">Front</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3456" target="_blank">FRCAP-3456</a></td>
+        <td>8h</td>
+        <td><span class="b b-cancel">Canceled</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Documentação de Produto (Confluence)<br><a class="cf"
+            href="https://hotmart.atlassian.net/wiki/spaces/financialflow/pages/2344353795/Portal+de+Consulta+-+Base+de+Conhecimento+eNotas"
+            target="_blank">📄 Portal de Consulta - Base de Conhecimento eNotas</a></td>
+        <td><span class="b b-mel">Melhoria</span></td>
+        <td>Portal KB</td>
+        <td class="est">Pronto Q1</td>
+        <td><span class="b b-done">Done</span> <span class="pct">100%</span></td>
+        <td><span class="b b-done">Q1-S5</span></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Treinamento de N2 e N3</td>
+        <td><span class="b b-dt">Déb. Técnico</span></td>
+        <td>(realizado 17/04)</td>
+        <td class="est">~8h</td>
+        <td><span class="b b-done">Done</span> <span class="pct">100%</span></td>
+        <td><span class="b b-done">Q2-S1</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- DOING -->
+  <div class="sec"><span class="st s-doing">🔄 Doing</span>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Descrição</th>
+        <th>Tipo</th>
+        <th>Card</th>
+        <th>Estimativa</th>
+        <th>Status</th>
+        <th>Sprint</th>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Documentação de Engenharia (Confluence)<br><a class="cf"
+            href="https://hotmart.atlassian.net/wiki/spaces/financialflow/pages/2404614216/Documentacao+Tecnica+de+Engenharia"
+            target="_blank">📄 Documentação Técnica de Engenharia</a> <button class="toggle" onclick="tog(this,'g3')">6
+            subtasks</button></td>
+        <td><span class="b b-mel">Melhoria</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3478" target="_blank">FRCAP-3478</a></td>
+        <td class="est">~80h</td>
+        <td><span class="b b-doing">Doing</span> <span class="pct">0%</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g3">
+        <td></td>
+        <td>Arquitetura do app-gw</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3479" target="_blank">FRCAP-3479</a></td>
+        <td>24h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g3">
+        <td></td>
+        <td>Arquitetura do app-emissor</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3480" target="_blank">FRCAP-3480</a></td>
+        <td>16h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g3">
+        <td></td>
+        <td>Playbook: Notas e filas travadas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3481" target="_blank">FRCAP-3481</a></td>
+        <td>8h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g3">
+        <td></td>
+        <td>Playbook: Sincronização de notas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3482" target="_blank">FRCAP-3482</a></td>
+        <td>8h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g3">
+        <td></td>
+        <td>Playbook: Erros de provedor e Portal Nacional</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3483" target="_blank">FRCAP-3483</a></td>
+        <td>8h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g3">
+        <td></td>
+        <td>Fluxos emissão, consulta e cancelamento NFSe/NFe</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3484" target="_blank">FRCAP-3484</a></td>
+        <td>16h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+
+      <tr>
+        <td>4</td>
+        <td>Testes Unitários e Prevenção de Regressões <button class="toggle" onclick="tog(this,'g4')">9
+            subtasks</button></td>
+        <td><span class="b b-dt">Déb. Técnico</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3461" target="_blank">FRCAP-3461</a></td>
+        <td class="est">~13h</td>
+        <td><span class="b b-doing">QA</span> <span class="pct">89%</span></td>
+        <td><span class="b b-doing">Q2-S1</span></td>
+      </tr>
+      <tr class="child g4">
+        <td></td>
+        <td>Viabilizar execução local dos testes</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3486" target="_blank">FRCAP-3486</a></td>
+        <td>2h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g4">
+        <td></td>
+        <td>Testes dos repositórios Emissor e Embed</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3487" target="_blank">FRCAP-3487</a></td>
+        <td>2h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g4">
+        <td></td>
+        <td>Testes E2E com Linguagem Natural no Pipeline</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3488" target="_blank">FRCAP-3488</a></td>
+        <td>1h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g4">
+        <td></td>
+        <td>Documentação detalhada sobre os testes</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3489" target="_blank">FRCAP-3489</a></td>
+        <td>3h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g4">
+        <td></td>
+        <td>1º Treinamento time eNotas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3490" target="_blank">FRCAP-3490</a></td>
+        <td>1h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g4">
+        <td></td>
+        <td>1º Treinamento Sustain</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3491" target="_blank">FRCAP-3491</a></td>
+        <td>1h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g4">
+        <td></td>
+        <td>Apresentação plano de testes para Stakeholders</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3492" target="_blank">FRCAP-3492</a></td>
+        <td>3h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g4">
+        <td></td>
+        <td>Correção testes de integração</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3589" target="_blank">FRCAP-3589</a></td>
+        <td>0.5h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child g4">
+        <td></td>
+        <td>Correção testes E2E</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3590" target="_blank">FRCAP-3590</a></td>
+        <td>1h</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+
+      <tr>
+        <td>5</td>
+        <td>Melhorias de Usabilidade para Reduzir Tickets <button class="toggle" onclick="tog(this,'g5')">9
+            children</button></td>
+        <td><span class="b b-dt">Déb. Técnico</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3069" target="_blank">FRCAP-3069</a></td>
+        <td class="est">~92h</td>
+        <td><span class="b b-doing">Doing</span> <span class="pct">22%</span></td>
+        <td><span class="b b-doing">Q1-S5</span></td>
+      </tr>
+      <tr class="child g5">
+        <td></td>
+        <td>[Front] Levantamento mensagens Emissor <button class="toggle" onclick="tog(this,'g5a')">5 subtasks</button>
+        </td>
+        <td><span class="b b-task">Task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3121" target="_blank">FRCAP-3121</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5a">
+        <td></td>
+        <td>Tela de Vendas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3143" target="_blank">FRCAP-3143</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5a">
+        <td></td>
+        <td>Tela de Produto</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3145" target="_blank">FRCAP-3145</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5a">
+        <td></td>
+        <td>Tela de Dashboard</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3231" target="_blank">FRCAP-3231</a></td>
+        <td>-</td>
+        <td><span class="b b-cancel">Canceled</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5a">
+        <td></td>
+        <td>Tela de Cliente</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3232" target="_blank">FRCAP-3232</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5a">
+        <td></td>
+        <td>Tela de Apps</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3233" target="_blank">FRCAP-3233</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child g5">
+        <td></td>
+        <td>[Front] Levantamento mensagens Embed <button class="toggle" onclick="tog(this,'g5b')">9 subtasks</button>
+        </td>
+        <td><span class="b b-task">Task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3122" target="_blank">FRCAP-3122</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5b">
+        <td></td>
+        <td>Tela de Empresa</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3144" target="_blank">FRCAP-3144</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5b">
+        <td></td>
+        <td>Tela Visão do Contador</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3183" target="_blank">FRCAP-3183</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5b">
+        <td></td>
+        <td>Tela de Onboarding</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3200" target="_blank">FRCAP-3200</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5b">
+        <td></td>
+        <td>Tela de Assinaturas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3201" target="_blank">FRCAP-3201</a></td>
+        <td>-</td>
+        <td><span class="b b-cancel">Canceled</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5b">
+        <td></td>
+        <td>Tela de NFes</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3202" target="_blank">FRCAP-3202</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5b">
+        <td></td>
+        <td>Tela de Importar Arquivo</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3203" target="_blank">FRCAP-3203</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5b">
+        <td></td>
+        <td>Tela de Mapeamento de Erros</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3204" target="_blank">FRCAP-3204</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5b">
+        <td></td>
+        <td>Tela de Consultar NFe</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3205" target="_blank">FRCAP-3205</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child L2 g5b">
+        <td></td>
+        <td>Tela de Flag Dinâmica</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3206" target="_blank">FRCAP-3206</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child g5">
+        <td></td>
+        <td>[PM & PD] Proposta novas copies Emissor</td>
+        <td><span class="b b-task">Task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3123" target="_blank">FRCAP-3123</a></td>
+        <td>16h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g5">
+        <td></td>
+        <td>[PM & PD] Proposta novas copies Embed</td>
+        <td><span class="b b-task">Task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3124" target="_blank">FRCAP-3124</a></td>
+        <td>20h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g5">
+        <td></td>
+        <td>[Back] Levantamento mensagens Emissor</td>
+        <td><span class="b b-task">Task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3125" target="_blank">FRCAP-3125</a></td>
+        <td>10h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g5">
+        <td></td>
+        <td>[Back] Levantamento mensagens Embed</td>
+        <td><span class="b b-task">Task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3126" target="_blank">FRCAP-3126</a></td>
+        <td>10h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g5">
+        <td></td>
+        <td>Adequação copies Emissor <button class="toggle" onclick="tog(this,'g5c')">2 subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3127" target="_blank">FRCAP-3127</a></td>
+        <td>12h</td>
+        <td><span class="b b-todo">Backlog</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child L2 g5c">
+        <td></td>
+        <td>[Back] Adequação copies Emissor</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3129" target="_blank">FRCAP-3129</a></td>
+        <td>6h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child L2 g5c">
+        <td></td>
+        <td>[Front] Adequação copies Emissor</td>
+        <td><span class="b b-front">Front</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3130" target="_blank">FRCAP-3130</a></td>
+        <td>6h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g5">
+        <td></td>
+        <td>Adequação copies Embed <button class="toggle" onclick="tog(this,'g5d')">2 subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3128" target="_blank">FRCAP-3128</a></td>
+        <td>12h</td>
+        <td><span class="b b-todo">Backlog</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child L2 g5d">
+        <td></td>
+        <td>[Back] Adequação copies Embed</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3131" target="_blank">FRCAP-3131</a></td>
+        <td>6h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child L2 g5d">
+        <td></td>
+        <td>[Front] Adequação copies Embed</td>
+        <td><span class="b b-front">Front</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3132" target="_blank">FRCAP-3132</a></td>
+        <td>6h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g5">
+        <td></td>
+        <td>[Front] Adequação validação formulário Emissor</td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3268" target="_blank">FRCAP-3268</a></td>
+        <td>12h</td>
+        <td><span class="b b-todo">Backlog</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+
+      <tr>
+        <td>6</td>
+        <td>Incentivar Certificado Digital vs Robôs</td>
+        <td><span class="b b-mel">Melhoria</span></td>
+        <td>(sem card)</td>
+        <td class="est-p">A estimar</td>
+        <td><span class="b b-doing">Doing</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- TO-DO -->
+  <div class="sec"><span class="st s-todo">📌 To-Do</span>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Descrição</th>
+        <th>Tipo</th>
+        <th>Card</th>
+        <th>Estimativa</th>
+        <th>Status</th>
+        <th>Sprint</th>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Identificação e Sincronização de Notas <button class="toggle" onclick="tog(this,'g7')">2 subtasks</button>
+        </td>
+        <td><span class="b b-bau">BAU</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-1546" target="_blank">FRCAP-1546</a></td>
+        <td class="est">~56h</td>
+        <td><span class="b b-todo">To Do</span> <span class="pct">0%</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g7">
+        <td></td>
+        <td>[Discovery] Cenários e soluções para sincronização</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3346" target="_blank">FRCAP-3346</a></td>
+        <td>4h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr class="child g7">
+        <td></td>
+        <td>[Spike] Análise técnica e proposta de automação</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3347" target="_blank">FRCAP-3347</a></td>
+        <td>4h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+
+      <tr>
+        <td>9</td>
+        <td>Refatoração da Tela de Empresas <button class="toggle" onclick="tog(this,'g9')">4 stories + 15
+            subtasks</button></td>
+        <td><span class="b b-dt">Déb. Técnico</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-2837" target="_blank">FRCAP-2837</a></td>
+        <td class="est">~161h</td>
+        <td><span class="b b-todo">Backlog</span> <span class="pct">20%</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child g9">
+        <td></td>
+        <td>Discovery das possibilidades de melhoria</td>
+        <td><span class="b b-task">Task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3138" target="_blank">FRCAP-3138</a></td>
+        <td>-</td>
+        <td><span class="b b-done">Done</span></td>
+        <td><span class="b b-todo">Q1-S5</span></td>
+      </tr>
+      <tr class="child g9">
+        <td></td>
+        <td>Story 0 - Prototipação de validações <button class="toggle" onclick="tog(this,'g9a')">1 subtask</button>
+        </td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3548" target="_blank">FRCAP-3548</a></td>
+        <td>1h</td>
+        <td><span class="b b-todo">Backlog</span></td>
+        <td><span class="b b-todo">Q2-S2</span></td>
+      </tr>
+      <tr class="child L2 g9a">
+        <td></td>
+        <td>T0 — Prototipar checklist de validação</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3553" target="_blank">FRCAP-3553</a></td>
+        <td>1h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S2</span></td>
+      </tr>
+      <tr class="child g9">
+        <td></td>
+        <td>Story 1 - Fundação: Constantes, Repository e Utilitários <button class="toggle" onclick="tog(this,'g9b')">4
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3550" target="_blank">FRCAP-3550</a></td>
+        <td>45h</td>
+        <td><span class="b b-todo">Backlog</span></td>
+        <td><span class="b b-todo">Q2-S2</span></td>
+      </tr>
+      <tr class="child L2 g9b">
+        <td></td>
+        <td>T1 — Centralizar constantes e magic strings</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3554" target="_blank">FRCAP-3554</a></td>
+        <td>10h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S2</span></td>
+      </tr>
+      <tr class="child L2 g9b">
+        <td></td>
+        <td>T2 — Criar EmpresaRepository.js</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3555" target="_blank">FRCAP-3555</a></td>
+        <td>20h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S2</span></td>
+      </tr>
+      <tr class="child L2 g9b">
+        <td></td>
+        <td>T-C — Consolidar Confirm no confirmAsync</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3556" target="_blank">FRCAP-3556</a></td>
+        <td>10h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S2</span></td>
+      </tr>
+      <tr class="child L2 g9b">
+        <td></td>
+        <td>T-D — Consolidar Notification no showError</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3557" target="_blank">FRCAP-3557</a></td>
+        <td>5h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S2</span></td>
+      </tr>
+      <tr class="child g9">
+        <td></td>
+        <td>Story 2 - Separação de Responsabilidades <button class="toggle" onclick="tog(this,'g9c')">4
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3551" target="_blank">FRCAP-3551</a></td>
+        <td>45h</td>
+        <td><span class="b b-todo">Backlog</span></td>
+        <td><span class="b b-todo">Q2-S1</span></td>
+      </tr>
+      <tr class="child L2 g9c">
+        <td></td>
+        <td>T3 — Unificar fábricas de controles duplicados</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3558" target="_blank">FRCAP-3558</a></td>
+        <td>20h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child L2 g9c">
+        <td></td>
+        <td>T4 — Criar EmpresaUIHelper.js</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3559" target="_blank">FRCAP-3559</a></td>
+        <td>10h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child L2 g9c">
+        <td></td>
+        <td>T5 — Criar EmpresaValidators.js</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3560" target="_blank">FRCAP-3560</a></td>
+        <td>10h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child L2 g9c">
+        <td></td>
+        <td>T6 — Isolar funções de lógica fiscal pura</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3561" target="_blank">FRCAP-3561</a></td>
+        <td>5h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child g9">
+        <td></td>
+        <td>Story 3 - Componentização: Extrair Abas e Wizard <button class="toggle" onclick="tog(this,'g9d')">6
+            subtasks</button></td>
+        <td><span class="b b-story">Story</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3552" target="_blank">FRCAP-3552</a></td>
+        <td>70h</td>
+        <td><span class="b b-todo">Backlog</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child L2 g9d">
+        <td></td>
+        <td>T-B — Extrair fábricas de Lookup com callbacks</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3562" target="_blank">FRCAP-3562</a></td>
+        <td>10h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child L2 g9d">
+        <td></td>
+        <td>T-A — Extrair fábricas de Form por aba</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3563" target="_blank">FRCAP-3563</a></td>
+        <td>30h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child L2 g9d">
+        <td></td>
+        <td>T7 — Extrair LocalizacaoTab.js</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3564" target="_blank">FRCAP-3564</a></td>
+        <td>5h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child L2 g9d">
+        <td></td>
+        <td>T8 — Extrair DadosMunicipaisTab.js</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3565" target="_blank">FRCAP-3565</a></td>
+        <td>5h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child L2 g9d">
+        <td></td>
+        <td>T9 — Extrair ProdutoTab.js</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3566" target="_blank">FRCAP-3566</a></td>
+        <td>10h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child L2 g9d">
+        <td></td>
+        <td>T10 — Criar WizardFactory e reduzir ConfigurarEmpresa.js</td>
+        <td><span class="b b-back">Back</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3567" target="_blank">FRCAP-3567</a></td>
+        <td>10h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+
+      <tr>
+        <td>10</td>
+        <td>Padronizar Branches/Commits com Cards</td>
+        <td><span class="b b-mel">Melhoria</span></td>
+        <td>(sem card)</td>
+        <td class="est">~8h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+
+      <tr>
+        <td>11</td>
+        <td>Detecção de Notas/Filas Travadas <button class="toggle" onclick="tog(this,'g11')">3 subtasks</button></td>
+        <td><span class="b b-bau">BAU</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3458" target="_blank">FRCAP-3458</a></td>
+        <td class="est">~24h</td>
+        <td><span class="b b-doing">Biz Refining</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child g11">
+        <td></td>
+        <td>[Discovery] Cenários de filas travadas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3469" target="_blank">FRCAP-3469</a></td>
+        <td>4h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child g11">
+        <td></td>
+        <td>[Spike] Análise técnica e proposta de automação</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3471" target="_blank">FRCAP-3471</a></td>
+        <td>4h</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr class="child g11">
+        <td></td>
+        <td>[Quebra-tarefas] Quebrar as tarefas</td>
+        <td><span class="b b-sub">Sub-task</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3615" target="_blank">FRCAP-3615</a></td>
+        <td>-</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+
+      <tr>
+        <td>12</td>
+        <td>Monitoramento de Provedores e SEFAZs</td>
+        <td><span class="b b-bau">BAU</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3459" target="_blank">FRCAP-3459</a></td>
+        <td class="est-p">A estimar (spike)</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-todo">Q2-S3</span></td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td>Enriquecimento de Logs e Rastreabilidade</td>
+        <td><span class="b b-dt">Déb. Técnico</span></td>
+        <td><a class="lk" href="https://hotmart.atlassian.net/browse/FRCAP-3457" target="_blank">FRCAP-3457</a></td>
+        <td class="est-p">A estimar (spike)</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td>Canal Único de Entrada de Vendas (DataHub)</td>
+        <td><span class="b b-dt">Déb. Técnico</span></td>
+        <td>(sem card)</td>
+        <td class="est-p">A estimar</td>
+        <td><span class="b b-todo">To Do</span></td>
+        <td><span class="b b-back">—</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="sec">
+    <table>
+      <tr class="sum-row">
+        <td colspan="5"></td>
+        <td class="est">Total estimado (excl. Done e A estimar): ~418h</td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer">Fonte: <a class="lk"
+      href="https://docs.google.com/document/d/1R269gRvUrx-p2XMzQ9J_q9iEYO6BYwP60XWSQwznio0" target="_blank">Post Mortem
+      Report War Room eNotas 12-20/02/2026</a> · Seção 5: Ações corretivas, preventivas e evolutivas</div>
+
+  <script>
+    function tog(btn, cls) {
+      btn.classList.toggle('open');
+      document.querySelectorAll('.' + cls).forEach(function (r) {
+        r.style.display = r.style.display === 'table-row' ? 'none' : 'table-row';
+      });
+    }
+  </script>
+</body>
+
+</html>
